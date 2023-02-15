@@ -5,12 +5,12 @@ public class Sudoku
     /*  Test Board
 7 2 4 8 6 5 1 3 9
 5 1 9 2 4 3 8 7 6
-3 0 6 7 9 1 5 4 2
+3 8 6 7 9 1 5 4 2
 1 7 8 6 2 9 4 5 3
 9 4 3 1 5 8 2 6 7
 6 5 2 3 7 4 9 1 8
 2 3 1 5 8 6 7 9 4
-8 9 5 4 3 7 6 2 1
+8 9 5 4 3 7 0 2 1
 4 6 7 9 1 2 3 8 5
      * 
      * 
@@ -131,13 +131,37 @@ public class Sudoku
         int[] sortedRow = sort(row);
 
         //Print check
-        /*for (int i : sortedRow)
+        for (int i : sortedRow)
         {
             System.out.print(i);
         }
-        System.out.println();*/
+        System.out.println();
 
         //Compare sorted arrays to find value of missing value
+        int missingValue = 0;
+        for (int i = 0; i < 9; i++)
+        {
+            //If sortedColumn and sortedRow are both missing a number from 1-9 then the missing number is the missing value
+            if (sortedColumn[i] != i && sortedRow[i] != i)
+            {
+                missingValue = i;
+                break;
+            }
+        }
+
+        //Fix missing value
+        board[rowLocation][columnLocation] = missingValue;
+
+        //Print board
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
+
     }
 
     public static int[] sort(int[] array)
