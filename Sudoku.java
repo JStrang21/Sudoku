@@ -80,6 +80,7 @@ public class Sudoku
         //Create array to store missing value locations
         int[][] locationOfMissingValues = new int[3][3];
         int numberMissing = 0;
+        //Loop over entire board
         for (int i = 0; i < board.length; i++)
         {
             for (int j = 0; j < board[i].length; j++)
@@ -126,16 +127,38 @@ public class Sudoku
         }
         
         //Sort column and row array
+        int[] sortedColumn = sort(column);
+        int[] sortedRow = sort(row);
+
+        //Print check
+        /*for (int i : sortedRow)
+        {
+            System.out.print(i);
+        }
+        System.out.println();*/
 
         //Compare sorted arrays to find value of missing value
     }
-    
-    
-    
-    
-    
-    
-    
+
+    public static int[] sort(int[] array)
+    {
+        //Bubblesort used to sort arrays
+        for (int i = 0; i < array.length - 1; i++)
+        {
+            for (int j = i + 1; j < array.length; j++)
+            {
+                //If prior element in array is greater than next element than swap the two
+                if (array[i] > array[j])
+                {
+                    int temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
+                }
+            }
+        }
+        return array;
+    }
+
     public static void printBoard(int[][] board)
     {
         for (int i = 0; i < 9; i++)
