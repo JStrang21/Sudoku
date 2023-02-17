@@ -3,16 +3,15 @@ import java.util.*;
 public class Sudoku
 {
     /*  Test Board
-7 2 4 8 6 5 1 3 9
-5 1 9 2 4 3 8 7 6
-3 8 6 7 9 1 5 4 2
-1 7 8 6 2 9 4 5 3
-9 4 3 1 5 8 2 6 7
-6 5 2 3 7 4 9 1 8
-2 3 1 5 8 6 7 9 4
-8 9 5 4 3 7 0 2 1
-4 6 7 9 1 2 3 8 5
-     * 
+0 2 4 8 6 5 1 3 9 
+5 1 9 2 4 3 8 7 6 
+3 8 6 7 9 1 5 4 2 
+1 7 8 6 2 9 4 5 3 
+9 4 3 1 5 8 2 6 7  
+6 5 2 3 7 4 9 1 8  
+2 3 1 5 8 6 7 9 4  
+8 9 5 4 3 7 6 2 1 
+4 6 7 9 1 2 3 8 5     * 
      * 
      * Justin P. Strang
      * EECS 1510 Sudoku Project
@@ -54,7 +53,7 @@ public class Sudoku
         //Store in int[][] variable where column of three represents the three possible missing values and the row represents the location of the value
         int[][] locationOfMissingValues = new int[3][3];
         locationOfMissingValues = findTypeOfMissingValue(board);
-       
+
         //Print Check: location[x][1] = row && location[x][2] = column
         //System.out.println(locationOfMissingValues[0][1]);
         //System.out.println(locationOfMissingValues[0][2]);
@@ -131,11 +130,11 @@ public class Sudoku
         int[] sortedRow = sort(row);
 
         //Print check
-        for (int i : sortedRow)
+        /*for (int i : sortedRow)
         {
             System.out.print(i);
         }
-        System.out.println();
+        System.out.println();*/
 
         //Compare sorted arrays to find value of missing value
         int missingValue = 0;
@@ -152,16 +151,7 @@ public class Sudoku
         //Fix missing value
         board[rowLocation][columnLocation] = missingValue;
 
-        //Print board
-        for (int i = 0; i < 9; i++)
-        {
-            for (int j = 0; j < 9; j++)
-            {
-                System.out.print(board[i][j] + " ");
-            }
-            System.out.println();
-        }
-
+        printBoard(board);
     }
 
     public static int[] sort(int[] array)
