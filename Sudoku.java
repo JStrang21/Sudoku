@@ -19,11 +19,11 @@ public class Sudoku
 5 1 9 2 4 3 8 7 6 
 3 8 6 7 9 1 5 4 2 
 1 7 8 6 2 9 4 5 3 
-9 4 3 1 5 8 2 6 7  
-6 5 2 3 7 4 9 1 8  
+9 4 0 1 5 8 2 6 7  
+6 5 0 3 7 4 9 1 8  
 2 3 1 5 8 6 7 9 4  
-8 9 5 4 3 7 6 2 0 
-4 6 7 9 1 2 3 8 0 
+8 9 5 4 3 7 6 2 1 
+4 6 7 9 1 2 3 8 5 
 * 
      * 
      * Justin P. Strang
@@ -128,7 +128,7 @@ public class Sudoku
         int[] rTwo = new int[9];
 
         //If true then two rows && if false then two columns
-        boolean twoRowsOrTwoColumns = findNumberRowsVsColumns(locationOfMissingValues);
+        //boolean twoRowsOrTwoColumns = findNumberRowsVsColumns(locationOfMissingValues);
         //Locations of missing values
         int rLocationOne = locationOfMissingValues[0][1];
         int rLocationTwo = locationOfMissingValues[1][1];
@@ -146,12 +146,10 @@ public class Sudoku
             {
                 rOne[i] = board[rLocationOne][i];
                 rTwo[i] = board[rLocationTwo][i];
-                cOne[i] = board[i][cLocationOne];
             }
             //Sort column and row arrays
             int[] rOneSorted = sort(rOne);
             int[] rTwoSorted = sort(rTwo);
-            int[] cOneSorted = sort(cOne);
 
             //PrintCheck
             /*for (int i = 0; i < 9; i++)
@@ -159,6 +157,7 @@ public class Sudoku
                 System.out.println(rOneSorted[i] + " " + rTwoSorted[i] + " " + cOneSorted[i]);
             }*/
 
+            //Loop through each column and if value is not present from 1-9 then thats the missing value
             int rOneMissing = 0;
             int rTwoMissing = 0;
             for (int i = 0; i <= 9; i++)
@@ -194,13 +193,39 @@ public class Sudoku
             {
                 cOne[i] = board[i][cLocationOne];
                 cTwo[i] = board[i][cLocationTwo];
-                rOne[i] = board[rLocationOne][i];
             }
             //Sort column and row arrays
             int[] cOneSorted = sort(cOne);
             int[] cTwoSorted = sort(cTwo);
-            int[] rOneSorted = sort(rOne);
 
+            //Loop through each column and if value is not present from 1-9 then thats the missing value
+            int cOneMissing = 0;
+            int cTwoMissing = 0;
+            for (int i = 0; i <= 9; i++)
+            {
+                if (cOneSorted[i] != i)
+                {
+                    cOneMissing = i;
+                    break;
+                }
+                
+            }
+
+            for (int i = 0; i < 9; i++)
+            {
+                if (cTwoSorted[i] != i)
+                {
+                    cTwoMissing = i;
+                    break;
+                }
+            }
+
+            //Place found value on board to replace missing square
+            board[rLocationOne][cLocationOne] = cOneMissing;
+            board[rLocationOne][cLocationTwo] = cTwoMissing;
+
+            System.out.println();
+            printBoard(board);
         }
 
 
