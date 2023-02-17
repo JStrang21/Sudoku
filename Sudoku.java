@@ -15,15 +15,15 @@ public class Sudoku
 
 
 
-7 2 4 8 0 5 1 3 9 
-5 1 9 2 0 3 8 7 6 
+7 2 4 8 6 5 1 3 9 
+5 1 9 2 4 3 8 7 6 
 3 8 6 7 9 1 5 4 2 
 1 7 8 6 2 9 4 5 3 
 9 4 3 1 5 8 2 6 7  
 6 5 2 3 7 4 9 1 8  
 2 3 1 5 8 6 7 9 4  
-8 9 5 4 3 7 6 2 1 
-4 6 7 9 1 2 3 8 5 
+8 9 5 4 3 7 6 2 0 
+4 6 7 9 1 2 3 8 0 
 * 
      * 
      * Justin P. Strang
@@ -148,6 +148,44 @@ public class Sudoku
                 rTwo[i] = board[rLocationTwo][i];
                 cOne[i] = board[i][cLocationOne];
             }
+            //Sort column and row arrays
+            int[] rOneSorted = sort(rOne);
+            int[] rTwoSorted = sort(rTwo);
+            int[] cOneSorted = sort(cOne);
+
+            //PrintCheck
+            /*for (int i = 0; i < 9; i++)
+            {
+                System.out.println(rOneSorted[i] + " " + rTwoSorted[i] + " " + cOneSorted[i]);
+            }*/
+
+            int rOneMissing = 0;
+            int rTwoMissing = 0;
+            for (int i = 0; i <= 9; i++)
+            {
+                if (rOneSorted[i] != i)
+                {
+                    rOneMissing = i;
+                    break;
+                }
+                
+            }
+
+            for (int i = 0; i < 9; i++)
+            {
+                if (rTwoSorted[i] != i)
+                {
+                    rTwoMissing = i;
+                    break;
+                }
+            }
+            
+            //Place correct value in missing squares
+            board[rLocationOne][cLocationOne] = rOneMissing;
+            board[rLocationTwo][cLocationOne] = rTwoMissing;
+
+            System.out.println();
+            printBoard(board);
         }
         else
         {
@@ -158,9 +196,14 @@ public class Sudoku
                 cTwo[i] = board[i][cLocationTwo];
                 rOne[i] = board[rLocationOne][i];
             }
+            //Sort column and row arrays
+            int[] cOneSorted = sort(cOne);
+            int[] cTwoSorted = sort(cTwo);
+            int[] rOneSorted = sort(rOne);
+
         }
 
-        
+
         
     }
 
