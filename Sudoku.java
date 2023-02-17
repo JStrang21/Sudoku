@@ -11,7 +11,20 @@ public class Sudoku
 6 5 2 3 7 4 9 1 8  
 2 3 1 5 8 6 7 9 4  
 8 9 5 4 3 7 6 2 1 
-4 6 7 9 1 2 3 8 5     * 
+4 6 7 9 1 2 3 8 5   
+
+
+
+7 2 4 8 0 5 1 3 9 
+5 1 9 2 0 3 8 7 6 
+3 8 6 7 9 1 5 4 2 
+1 7 8 6 2 9 4 5 3 
+9 4 3 1 5 8 2 6 7  
+6 5 2 3 7 4 9 1 8  
+2 3 1 5 8 6 7 9 4  
+8 9 5 4 3 7 6 2 1 
+4 6 7 9 1 2 3 8 5 
+* 
      * 
      * Justin P. Strang
      * EECS 1510 Sudoku Project
@@ -107,7 +120,48 @@ public class Sudoku
 
     public static void typeTwoSolver(int[][] board, int[][] locationOfMissingValues)
     {
+        //Arrays to hold values of rows and columns
+        //Declare them all but won't need one
+        int[] cOne = new int[9];
+        int[] cTwo = new int[9];
+        int[] rOne = new int[9];
+        int[] rTwo = new int[9];
 
+        //If true then two rows && if false then two columns
+        boolean twoRowsOrTwoColumns = findNumberRowsVsColumns(locationOfMissingValues);
+        //Locations of missing values
+        int rLocationOne = locationOfMissingValues[0][1];
+        int rLocationTwo = locationOfMissingValues[1][1];
+        int cLocationOne = locationOfMissingValues[0][2];
+        int cLocationTwo = locationOfMissingValues[1][2];
+        
+        //PrintCheck
+        //System.out.println(rLocationOne + " " + cLocationOne + " " + rLocationTwo + " " + cLocationTwo);
+
+        //Both on same Column 
+        if (cLocationOne == cLocationTwo)
+        {
+            //Loop through and add present values to row and column arrays
+            for (int i = 0; i < 9; i++)
+            {
+                rOne[i] = board[rLocationOne][i];
+                rTwo[i] = board[rLocationTwo][i];
+                cOne[i] = board[i][cLocationOne];
+            }
+        }
+        else
+        {
+            //Loop through and add present values to row and column arrays
+            for (int i = 0; i < 9; i++)
+            {
+                cOne[i] = board[i][cLocationOne];
+                cTwo[i] = board[i][cLocationTwo];
+                rOne[i] = board[rLocationOne][i];
+            }
+        }
+
+        
+        
     }
 
     public static void typeOneSolver(int[][] board, int[][] locationOfMissingValues)
@@ -183,5 +237,17 @@ public class Sudoku
             }
             System.out.println();
         }
+    }
+
+    public static boolean findNumberRowsVsColumns(int[][] missingValues)
+    {
+        //True == rows && false == columns
+        boolean twoRowsOrColumns = false;
+        if (missingValues[0][1] == missingValues[1][1])
+        {
+            twoRowsOrColumns = true;
+        }
+
+        return twoRowsOrColumns;
     }
 }
