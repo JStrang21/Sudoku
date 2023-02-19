@@ -15,12 +15,12 @@ public class Sudoku
 
 
 
-7 2 4 8 6 5 1 3 9 
-5 1 9 2 4 3 8 7 6 
+7 2 4 8 6 5 1 3 0 
+5 1 9 2 4 3 8 7 0 
 3 8 6 7 9 1 5 4 2 
 1 7 8 6 2 9 4 5 3 
-9 4 0 1 5 8 2 6 7  
-6 5 0 3 7 4 9 1 8  
+9 4 3 1 5 8 2 6 7  
+6 5 2 3 7 4 9 1 8  
 2 3 1 5 8 6 7 9 4  
 8 9 5 4 3 7 6 2 1 
 4 6 7 9 1 2 3 8 5 
@@ -115,7 +115,37 @@ public class Sudoku
 
     public static void typeThreeSolver(int[][] board, int[][] locationOfMissingValues)
     {
+        //Figure out the value of the loner square by reading the 3x3 square it is in
+        int columnNumber = 0;
+        int rowNumber = 0;
 
+        int numberMissingInRow = 0;
+        int currentColumnIndex = 0;
+        for (int i = 0; i < 9; i++)
+        {
+            if (numberMissingInRow == 1)
+            {
+                columnNumber = currentColumnIndex;
+                rowNumber = i;
+            }
+            
+            for (int j = 0; j < 9; j++)
+            {
+                if (board[i][j] == 0)
+                {
+                    numberMissingInRow++;
+                }
+            }
+            
+        }
+
+        System.out.println(rowNumber + " " + columnNumber);
+        //int[][] location = {{1, rowNumber, columnNumber}};
+        //typeOneSolver(board, location);
+
+        
+
+        //Once loner is figured out then its a type two problem
     }
 
     public static void typeTwoSolver(int[][] board, int[][] locationOfMissingValues)
@@ -154,14 +184,21 @@ public class Sudoku
             //PrintCheck
             /*for (int i = 0; i < 9; i++)
             {
-                System.out.println(rOneSorted[i] + " " + rTwoSorted[i] + " " + cOneSorted[i]);
+                System.out.println(rOneSorted[i] + " " + rTwoSorted[i]);
             }*/
 
             //Loop through each column and if value is not present from 1-9 then thats the missing value
             int rOneMissing = 0;
             int rTwoMissing = 0;
-            for (int i = 0; i <= 9; i++)
+            for (int i = 0; i < 9; i++)
             {
+                //Edge case where missing value is 9: loop terminates early (do-while loop might work better)
+                if (i == 8  && rOneMissing == 0)
+                {
+                    rOneMissing = 9;
+                    break;
+                }
+                //If sorted array value doesn't equal current i then that's the missing value
                 if (rOneSorted[i] != i)
                 {
                     rOneMissing = i;
@@ -172,12 +209,22 @@ public class Sudoku
 
             for (int i = 0; i < 9; i++)
             {
+                //Edge case where missing value is 9: loop terminates early
+                if (i == 8  && rTwoMissing == 0)
+                {
+                    rTwoMissing = 9;
+                    break;
+                }
+                //If sorted array value doesn't equal current i then that's the missing value
                 if (rTwoSorted[i] != i)
                 {
                     rTwoMissing = i;
                     break;
                 }
             }
+
+            //Print check
+            //System.out.println(rOneMissing + " " + rTwoMissing);
             
             //Place correct value in missing squares
             board[rLocationOne][cLocationOne] = rOneMissing;
@@ -262,6 +309,11 @@ public class Sudoku
         int missingValue = 0;
         for (int i = 0; i < 9; i++)
         {
+            if (i == 8 && missingValue == 0)
+            {
+                missingValue = 9;
+                break;
+            }
             //If sortedColumn and sortedRow are both missing a number from 1-9 then the missing number is the missing value
             if (sortedColumn[i] != i && sortedRow[i] != i)
             {
@@ -273,6 +325,7 @@ public class Sudoku
         //Fix missing value
         board[rowLocation][columnLocation] = missingValue;
 
+        System.out.println();
         printBoard(board);
     }
 
