@@ -15,10 +15,10 @@ public class Sudoku
 
 
 
-7 2 4 8 6 5 1 3 0 
-5 1 9 2 4 3 8 7 0 
-3 8 6 7 9 1 5 4 2 
-1 7 8 6 2 9 4 5 3 
+7 2 4 8 6 5 1 3 9 
+5 1 9 2 4 3 8 7 6 
+3 8 0 0 9 1 5 4 2 
+1 7 0 6 2 9 4 5 3 
 9 4 3 1 5 8 2 6 7  
 6 5 2 3 7 4 9 1 8  
 2 3 1 5 8 6 7 9 4  
@@ -115,35 +115,35 @@ public class Sudoku
 
     public static void typeThreeSolver(int[][] board, int[][] locationOfMissingValues)
     {
-        //Figure out the value of the loner square by reading the 3x3 square it is in
-        int columnNumber = 0;
-        int rowNumber = 0;
-
-        int numberMissingInRow = 0;
-        int currentColumnIndex = 0;
+        //Figure out the location of the loner square: loop through board and count how many missing are in each row
+        int lonerRowLocation = 0;
+        int lonerColumnLocation = 0;
         for (int i = 0; i < 9; i++)
         {
-            if (numberMissingInRow == 1)
-            {
-                columnNumber = currentColumnIndex;
-                rowNumber = i;
-            }
-            
+            int numberInRow = 0;
             for (int j = 0; j < 9; j++)
             {
                 if (board[i][j] == 0)
                 {
-                    numberMissingInRow++;
+                    lonerRowLocation = i;
+                    lonerColumnLocation = j;
+                    numberInRow++;
                 }
             }
-            
+            if (numberInRow == 1)
+            {
+                break;
+            }
         }
 
-        System.out.println(rowNumber + " " + columnNumber);
-        //int[][] location = {{1, rowNumber, columnNumber}};
-        //typeOneSolver(board, location);
+        //Print Check
+        //System.out.println(lonerRowLocation + " " + lonerColumnLocation);
 
+        //Once loner square location is known then figure out other values in 3x3 square
+        solve3x3(board, lonerRowLocation, lonerColumnLocation);
         
+
+
 
         //Once loner is figured out then its a type two problem
     }
@@ -327,6 +327,33 @@ public class Sudoku
 
         System.out.println();
         printBoard(board);
+    }
+
+    public static void solve3x3(int[][] board, int rowLocation, int columnLocation)
+    {
+        //Found method for searching 3x3 box in the book
+        int[] values = new int[9];
+
+        //Find top left square of 3x3 square
+        int firstSquareRow = (rowLocation / 3) * 3;
+        int firstSquareColumn = (columnLocation / 3) * 3;
+        
+        //Loop through 3x3 square starting at top-left / first square
+        int i = 0; 
+        for (int r = 0; r < 3; r++)
+        {
+            for (int c = 0; c < 3; c++)
+            {
+                values[i] = board[r + firstSquareRow][c + firstSquareColumn];
+                i++;
+            }
+        }
+                
+        int[] sortedValues = sort(values);
+
+
+
+        
     }
 
     public static int[] sort(int[] array)
