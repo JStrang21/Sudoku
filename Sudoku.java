@@ -17,8 +17,8 @@ public class Sudoku
 
 7 2 4 8 6 5 1 3 9 
 5 1 9 2 4 3 8 7 6 
-3 8 0 0 9 1 5 4 2 
-1 7 0 0 2 9 4 5 3 
+3 8 6 7 9 1 0 4 2 
+1 7 8 6 2 9 0 0 3 
 9 4 3 1 5 8 2 6 7  
 6 5 2 3 7 4 9 1 8  
 2 3 1 5 8 6 7 9 4  
@@ -117,47 +117,20 @@ public class Sudoku
     {
         //Check if its 2x2 square of missing values
 
+        int[] lonerLocationAndValue = new int[3];
         //Find location of loner square
-        findLonerSquare(board);
+        lonerLocationAndValue = findLonerSquare(board);
 
-        printBoard(board);
-
-        //Figure out the location of the loner square: loop through board and count how many missing are in each row
-        int lonerRowLocation = 0;
-        int lonerColumnLocation = 0;
-        for (int i = 0; i < 9; i++)
-        {
-            int numberInRow = 0;
-            for (int j = 0; j < 9; j++)
-            {
-                if (board[i][j] == 0)
-                {
-                    lonerRowLocation = i;
-                    lonerColumnLocation = j;
-                    numberInRow++;
-                }
-            }
-            if (numberInRow == 1)
-            {
-                break;
-            }
-        }
-
-        
-
-        //Print Check
-        //System.out.println(lonerRowLocation + " " + lonerColumnLocation);
-
-        //Once loner square location is known then figure out other values in 3x3 square
-        //solve3x3(board, lonerRowLocation, lonerColumnLocation);
-        
-
-
+        System.out.println(lonerLocationAndValue[0] + " " + lonerLocationAndValue[1] + " " + lonerLocationAndValue[2]);
 
         //Once loner is figured out then its a type two problem
+        //Find updated missing values
+        locationOfMissingValues = findTypeOfMissingValue(board);
+        //Type two solver for remaining two values
+        typeTwoSolver(board, locationOfMissingValues);
     }
 
-    public static void findLonerSquare(int[][] board)
+    public static int[] findLonerSquare(int[][] board)
     {
 
         int rowLocation = 0;
@@ -204,11 +177,13 @@ public class Sudoku
         }
 
         //Once loner square is found create array of values in the 3x3 square to find what the missing value's value is
-        solve3x3(board, lonerRowLocation, columnLocation);
-        System.out.println(lonerRowLocation + " " + lonerColumnLocation);
+        int[] lonerLocation = new int[3];
+        lonerLocation = solve3x3(board, lonerRowLocation, lonerColumnLocation);
+        //System.out.println(lonerRowLocation + " " + lonerColumnLocation);
+        return lonerLocation;
     }
 
-    public static void solve3x3(int[][] board, int rowLocation, int columnLocation)
+    public static int[] solve3x3(int[][] board, int rowLocation, int columnLocation)
     {
         //Found method for searching 3x3 box in the book
         int[] values = new int[9];
@@ -246,7 +221,13 @@ public class Sudoku
                 break;
             }
         }
-        System.out.println(missingValue);
+        
+        //System.out.println(rowLocation + " " + columnLocation + " " + missingValue);
+        //Place found value into square
+        board[rowLocation][columnLocation] = missingValue;
+
+        int[] lonerLocation = {rowLocation, columnLocation, missingValue};
+        return lonerLocation;
     }
 
     public static void typeTwoSolver(int[][] board, int[][] locationOfMissingValues)
