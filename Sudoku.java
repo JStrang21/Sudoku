@@ -18,10 +18,10 @@ public class Sudoku
 7 2 4 8 6 5 1 3 9 
 5 1 9 2 4 3 8 7 6 
 3 8 6 7 9 1 5 4 2 
-1 7 8 6 2 9 4 0 3 
-9 4 3 1 5 8 2 0 7  
-6 5 2 3 7 4 9 1 8  
-2 3 1 5 8 6 7 9 4  
+1 7 8 6 2 9 4 5 3 
+9 4 3 1 5 8 2 6 7  
+6 5 2 3 0 4 9 1 8  
+2 3 1 5 0 6 7 9 4  
 8 9 5 4 3 7 6 2 1 
 4 6 7 9 1 2 3 8 5 
 * 
@@ -275,7 +275,7 @@ public class Sudoku
             for (int i = 0; i < 9; i++)
             {
                 //Edge case where missing value is 9: loop terminates early (do-while loop might work better)
-                if (i == 8  && rOneMissing == 0)
+                if (i == 8  && rOneMissing == 0 && rOneSorted[i] == 8)
                 {
                     rOneMissing = 9;
                     break;
@@ -292,7 +292,7 @@ public class Sudoku
             for (int i = 0; i < 9; i++)
             {
                 //Edge case where missing value is 9: loop terminates early
-                if (i == 8  && rTwoMissing == 0)
+                if (i == 8  && rTwoMissing == 0 && rTwoSorted[i] == 8)
                 {
                     rTwoMissing = 9;
                     break;
@@ -314,6 +314,7 @@ public class Sudoku
 
             System.out.print("(" + rLocationOne + "," + cLocationOne + "," + rOneMissing + ") ");
             System.out.print("(" + rLocationTwo + "," + cLocationTwo + "," + rTwoMissing + ") ");
+            System.out.println();
         }
         //Both on same row
         else
@@ -333,7 +334,7 @@ public class Sudoku
             int cTwoMissing = 0;
             for (int i = 0; i < 9; i++)
             {
-                if (cOneMissing == 0 && i == 8)
+                if (cOneSorted[i] == 8 && i == 8 && cOneMissing == 0)
                 {
                     cOneMissing = 9;
                     break;
@@ -348,9 +349,9 @@ public class Sudoku
 
             for (int i = 0; i < 9; i++)
             {
-                if (cTwoMissing == 0 && i == 8)
+                if (cTwoMissing == 0 && i == 8 && cTwoSorted[i] == 8)
                 {
-                    cTwoMissing = 9;
+                    cTwoMissing = 8;
                     break;
                 }
                 if (cTwoSorted[i] != i)
