@@ -17,9 +17,9 @@ public class Sudoku
 
 7 2 4 8 6 5 1 3 9 
 5 1 9 2 4 3 8 7 6 
-3 8 6 7 9 1 0 4 2 
-1 7 8 6 2 9 0 0 3 
-9 4 3 1 5 8 2 6 7  
+3 8 6 7 9 1 5 4 2 
+1 7 8 6 2 9 4 0 3 
+9 4 3 1 5 8 2 0 7  
 6 5 2 3 7 4 9 1 8  
 2 3 1 5 8 6 7 9 4  
 8 9 5 4 3 7 6 2 1 
@@ -30,8 +30,6 @@ public class Sudoku
      * EECS 1510 Sudoku Project
      * Sudoku solver project where the program is read in a number of 9x9 matrices and outputs the numbers needed to solve the matrices
      * First Commit 02/12/2023
-     *      Will begin by getting one board to work
-     *      Maybe use int[][][] to put all boards in a single variable
      */
     public static void main(String[] args)
     {
@@ -121,7 +119,7 @@ public class Sudoku
         //Find location of loner square
         lonerLocationAndValue = findLonerSquare(board);
 
-        System.out.println(lonerLocationAndValue[0] + " " + lonerLocationAndValue[1] + " " + lonerLocationAndValue[2]);
+        System.out.print("(" + lonerLocationAndValue[0] + "," + lonerLocationAndValue[1] + "," + lonerLocationAndValue[2] + ") ");
 
         //Once loner is figured out then its a type two problem
         //Find updated missing values
@@ -140,6 +138,7 @@ public class Sudoku
         int counter = 0;
         for (int i = 0; i < 9; i++)
         {
+            //Need to use counter for iterating rows-need same value for every 3 rows
             if (i < 3)
             {
                 counter = 0;
@@ -169,6 +168,7 @@ public class Sudoku
                     }
                 }
             }
+            //If only one missing value in a 3x3 square then thats the loner
             if (numberMissingInSquare == 1)
             {
                 
@@ -269,7 +269,7 @@ public class Sudoku
                 System.out.println(rOneSorted[i] + " " + rTwoSorted[i]);
             }*/
 
-            //Loop through each column and if value is not present from 1-9 then thats the missing value
+            //Loop through each row and if value is not present from 1-9 then thats the missing value
             int rOneMissing = 0;
             int rTwoMissing = 0;
             for (int i = 0; i < 9; i++)
@@ -312,9 +312,10 @@ public class Sudoku
             board[rLocationOne][cLocationOne] = rOneMissing;
             board[rLocationTwo][cLocationOne] = rTwoMissing;
 
-            System.out.println();
-            printBoard(board);
+            System.out.print("(" + rLocationOne + "," + cLocationOne + "," + rOneMissing + ") ");
+            System.out.print("(" + rLocationTwo + "," + cLocationTwo + "," + rTwoMissing + ") ");
         }
+        //Both on same row
         else
         {
             //Loop through and add present values to row and column arrays
@@ -330,8 +331,13 @@ public class Sudoku
             //Loop through each column and if value is not present from 1-9 then thats the missing value
             int cOneMissing = 0;
             int cTwoMissing = 0;
-            for (int i = 0; i <= 9; i++)
+            for (int i = 0; i < 9; i++)
             {
+                if (cOneMissing == 0 && i == 8)
+                {
+                    cOneMissing = 9;
+                    break;
+                }
                 if (cOneSorted[i] != i)
                 {
                     cOneMissing = i;
@@ -342,6 +348,11 @@ public class Sudoku
 
             for (int i = 0; i < 9; i++)
             {
+                if (cTwoMissing == 0 && i == 8)
+                {
+                    cTwoMissing = 9;
+                    break;
+                }
                 if (cTwoSorted[i] != i)
                 {
                     cTwoMissing = i;
@@ -353,8 +364,10 @@ public class Sudoku
             board[rLocationOne][cLocationOne] = cOneMissing;
             board[rLocationOne][cLocationTwo] = cTwoMissing;
 
+            System.out.print("(" + rLocationOne + "," + cLocationOne + "," + cOneMissing + ") ");
+            System.out.print("(" + rLocationOne + "," + cLocationTwo + "," + cTwoMissing + ") ");
             System.out.println();
-            printBoard(board);
+            //printBoard(board);
         }
 
 
