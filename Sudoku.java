@@ -18,7 +18,7 @@ public class Sudoku
 7 2 4 8 6 5 1 3 9 
 5 1 9 2 4 3 8 7 6 
 3 8 0 0 9 1 5 4 2 
-1 7 0 6 2 9 4 5 3 
+1 7 0 0 2 9 4 5 3 
 9 4 3 1 5 8 2 6 7  
 6 5 2 3 7 4 9 1 8  
 2 3 1 5 8 6 7 9 4  
@@ -64,7 +64,7 @@ public class Sudoku
         //To solver needs to find squares with missing values, recognize the problem type, check rows and columns 
         //Send board to another method to find the missing values and return what type of problem it is and where the missing values are located
         //Store in int[][] variable where column of three represents the three possible missing values and the row represents the location of the value
-        int[][] locationOfMissingValues = new int[3][3];
+        int[][] locationOfMissingValues = new int[4][3];
         locationOfMissingValues = findTypeOfMissingValue(board);
 
         //Print Check: location[x][1] = row && location[x][2] = column
@@ -90,7 +90,7 @@ public class Sudoku
     public static int[][] findTypeOfMissingValue(int[][] board)
     {
         //Create array to store missing value locations
-        int[][] locationOfMissingValues = new int[3][3];
+        int[][] locationOfMissingValues = new int[4][3];
         int numberMissing = 0;
         //Loop over entire board
         for (int i = 0; i < board.length; i++)
@@ -115,6 +115,13 @@ public class Sudoku
 
     public static void typeThreeSolver(int[][] board, int[][] locationOfMissingValues)
     {
+        //Check if its 2x2 square of missing values
+
+        //Find location of loner square
+        findLonerSquare(board);
+
+        printBoard(board);
+
         //Figure out the location of the loner square: loop through board and count how many missing are in each row
         int lonerRowLocation = 0;
         int lonerColumnLocation = 0;
@@ -136,16 +143,110 @@ public class Sudoku
             }
         }
 
+        
+
         //Print Check
         //System.out.println(lonerRowLocation + " " + lonerColumnLocation);
 
         //Once loner square location is known then figure out other values in 3x3 square
-        solve3x3(board, lonerRowLocation, lonerColumnLocation);
+        //solve3x3(board, lonerRowLocation, lonerColumnLocation);
         
 
 
 
         //Once loner is figured out then its a type two problem
+    }
+
+    public static void findLonerSquare(int[][] board)
+    {
+
+        int rowLocation = 0;
+        int columnLocation = 0;
+        int lonerRowLocation = 0;
+        int lonerColumnLocation = 0;
+        int counter = 0;
+        for (int i = 0; i < 9; i++)
+        {
+            if (i < 3)
+            {
+                counter = 0;
+            }
+            else if (i >= 3 && i < 6)
+            {
+                counter = 3;
+            }
+            else {
+                counter = 6;
+            }
+            int numberMissingInSquare = 0;
+            for (int j = 0; j < 3; j++)
+            {
+                for (int k = 0; k < 3; k++)
+                {
+                    //Relate position within 3x3 square to overall 9x9 square
+                    rowLocation = j + 3 * counter / 3;
+                    columnLocation = k + i % 3 * 3;
+                    //System.out.println(rowLocation + " " + columnLocation);
+                    if (board[rowLocation][columnLocation] == 0)
+                    {
+                        lonerRowLocation = rowLocation;
+                        lonerColumnLocation = columnLocation;
+                        numberMissingInSquare++;
+                        //System.out.println(rowLocation + " " + columnLocation);
+                    }
+                }
+            }
+            if (numberMissingInSquare == 1)
+            {
+                
+                break;
+            }
+        }
+
+        //Once loner square is found create array of values in the 3x3 square to find what the missing value's value is
+        solve3x3(board, lonerRowLocation, columnLocation);
+        System.out.println(lonerRowLocation + " " + lonerColumnLocation);
+    }
+
+    public static void solve3x3(int[][] board, int rowLocation, int columnLocation)
+    {
+        //Found method for searching 3x3 box in the book
+        int[] values = new int[9];
+
+        //Find top left square of 3x3 square
+        int firstSquareRow = (rowLocation / 3) * 3;
+        int firstSquareColumn = (columnLocation / 3) * 3;
+        
+        //Loop through 3x3 square starting at top-left / first square
+        int i = 0; 
+        for (int r = 0; r < 3; r++)
+        {
+            for (int c = 0; c < 3; c++)
+            {
+                values[i] = board[r + firstSquareRow][c + firstSquareColumn];
+                i++;
+            }
+        }
+                
+        int[] sortedValues = sort(values);
+
+        int missingValue = 0;
+        for (int j = 1; j < 9; j++)
+        {
+            //Case where 9 is missing value
+            if (j == 8)
+            {
+                missingValue = 9;
+                break;
+            }
+        
+            if (sortedValues[j] != j)
+            {
+                missingValue = j;
+                break;
+            }
+        }
+        System.out.println(missingValue);
     }
 
     public static void typeTwoSolver(int[][] board, int[][] locationOfMissingValues)
@@ -327,33 +428,6 @@ public class Sudoku
 
         System.out.println();
         printBoard(board);
-    }
-
-    public static void solve3x3(int[][] board, int rowLocation, int columnLocation)
-    {
-        //Found method for searching 3x3 box in the book
-        int[] values = new int[9];
-
-        //Find top left square of 3x3 square
-        int firstSquareRow = (rowLocation / 3) * 3;
-        int firstSquareColumn = (columnLocation / 3) * 3;
-        
-        //Loop through 3x3 square starting at top-left / first square
-        int i = 0; 
-        for (int r = 0; r < 3; r++)
-        {
-            for (int c = 0; c < 3; c++)
-            {
-                values[i] = board[r + firstSquareRow][c + firstSquareColumn];
-                i++;
-            }
-        }
-                
-        int[] sortedValues = sort(values);
-
-
-
-        
     }
 
     public static int[] sort(int[] array)
