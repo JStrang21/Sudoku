@@ -3,15 +3,42 @@ import java.util.*;
 public class Sudoku
 {
     /*  Test Board
-0 2 4 8 6 5 1 3 9 
+7 2 4 8 6 5 1 3 9 
 5 1 9 2 4 3 8 7 6 
-3 8 6 7 9 1 5 4 2 
+3 0 6 7 9 1 5 4 2 
 1 7 8 6 2 9 4 5 3 
 9 4 3 1 5 8 2 6 7  
 6 5 2 3 7 4 9 1 8  
 2 3 1 5 8 6 7 9 4  
 8 9 5 4 3 7 6 2 1 
 4 6 7 9 1 2 3 8 5   
+7 2 4 8 6 5 1 3 9 
+5 1 9 2 4 3 8 7 6 
+3 8 6 7 9 1 5 4 2 
+1 7 8 6 2 9 4 0 3 
+9 4 3 1 5 8 2 0 7  
+6 5 2 3 7 4 9 1 8  
+2 3 1 5 8 6 7 9 4  
+8 9 5 4 3 7 6 2 1 
+4 6 7 9 1 2 3 8 5
+7 2 4 8 6 5 1 3 9 
+5 1 9 2 4 3 8 7 6 
+3 8 6 7 9 1 5 4 2 
+1 7 8 6 2 9 4 5 3 
+9 4 3 1 5 8 2 6 7  
+6 5 2 3 7 4 0 0 8  
+2 3 1 5 8 6 7 0 4  
+8 9 5 4 3 7 6 2 1 
+4 6 7 9 1 2 3 8 5
+0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0 0
 
 
 
@@ -35,16 +62,23 @@ public class Sudoku
     {
         //Create a scanner to get user input
         Scanner input = new Scanner(System.in);
+        //Prompt for number of boards
+        System.out.println("Enter number of boards: ");
+        int numberOfBoards = input.nextInt();
         //Prompt user for input
         System.out.println("Enter three 9x9 matrices: ");
-        //Instantiate board variables which will have input read into
-        int[][] boardOne = new int[9][9];
+        int[][][] boards = new int[100][9][9];
+        //Need to be able to read in any number of boards
         //Use for loop to read in user input to board variable
-        for (int i = 0; i < 9; i++)
+        for (int k = 0; k < numberOfBoards; k++)
         {
-            for (int j = 0; j < 9; j++)
+            for (int i = 0; i < 9; i++)
             {
-                boardOne[i][j] = input.nextInt();
+                for (int j = 0; j < 9; j++)
+                {
+                    boards[k][i][j] = input.nextInt();
+                    
+                }
             }
         }
         
@@ -53,7 +87,10 @@ public class Sudoku
         //printBoard(boardOne);
         
         //Send board to board solver method
-        boardSolver(boardOne);
+       for (int i = 0; i < numberOfBoards; i++)
+        {
+            boardSolver(boards[i]);
+        }
 
     }
 
@@ -405,9 +442,14 @@ public class Sudoku
         int missingValue = 0;
         for (int i = 0; i < 9; i++)
         {
-            if (i == 8 && missingValue == 0)
+            if (i == 8 && missingValue == 0 && sortedColumn[i] == 8)
             {
                 missingValue = 9;
+                break;
+            }
+            if (i == 8 && missingValue == 0 && sortedColumn[i] == 9)
+            {
+                missingValue = 8;
                 break;
             }
             //If sortedColumn and sortedRow are both missing a number from 1-9 then the missing number is the missing value
@@ -421,8 +463,8 @@ public class Sudoku
         //Fix missing value
         board[rowLocation][columnLocation] = missingValue;
 
+        System.out.print("(" + rowLocation + "," + columnLocation + "," + missingValue + ") ");
         System.out.println();
-        printBoard(board);
     }
 
     public static int[] sort(int[] array)
