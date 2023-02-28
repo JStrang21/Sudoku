@@ -40,8 +40,6 @@ public class Sudoku
 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0
 
-
-
 7 2 4 8 6 5 1 3 9 
 5 1 9 2 4 3 8 7 6 
 3 8 6 7 9 1 5 4 2 
@@ -77,7 +75,6 @@ public class Sudoku
                 for (int j = 0; j < 9; j++)
                 {
                     boards[k][i][j] = input.nextInt();
-                    
                 }
             }
         }
@@ -87,15 +84,22 @@ public class Sudoku
         //printBoard(boardOne);
         
         //Send board to board solver method
-       for (int i = 0; i < numberOfBoards; i++)
+        for (int i = 0; i < numberOfBoards; i++)
         {
             boardSolver(boards[i]);
         }
+        System.out.println("END");
 
     }
 
     public static void boardSolver(int[][] board)
     {
+        //Check if board is last board (board with all zeros)
+        if (checkLastBoard(board))
+        {
+            return;
+        }
+        
         //To solver needs to find squares with missing values, recognize the problem type, check rows and columns 
         //Send board to another method to find the missing values and return what type of problem it is and where the missing values are located
         //Store in int[][] variable where column of three represents the three possible missing values and the row represents the location of the value
@@ -120,6 +124,18 @@ public class Sudoku
             typeOneSolver(board, locationOfMissingValues);
         }
 
+    }
+
+    public static boolean checkLastBoard(int[][] board)
+    {
+        if (board[0][0] == 0 && board[0][1] == 0 && board[0][3] == 0)
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
     }
 
     public static int[][] findTypeOfMissingValue(int[][] board)
