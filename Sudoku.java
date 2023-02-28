@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Sudoku
 {
-    /*  Test Board
+    /*  Test Boards
 7 2 4 8 6 5 1 3 9 
 5 1 9 2 4 3 8 7 6 
 3 0 6 7 9 1 5 4 2 
@@ -60,15 +60,30 @@ public class Sudoku
     {
         //Create a scanner to get user input
         Scanner input = new Scanner(System.in);
+        
         //Prompt for number of boards
-        System.out.println("Enter number of boards: ");
-        int numberOfBoards = input.nextInt();
+        //System.out.println("Enter number of boards: ");
+        //int numberOfBoards = input.nextInt();
+        
         //Prompt user for input
         System.out.println("Enter three 9x9 matrices: ");
         int[][][] boards = new int[100][9][9];
+       
+        int boardNumber = 0;
+        while (input.hasNext())
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    boards[boardNumber][i][j] = input.nextInt();
+                }
+            }
+            boardNumber++;
+        }
         //Need to be able to read in any number of boards
         //Use for loop to read in user input to board variable
-        for (int k = 0; k < numberOfBoards; k++)
+        /*for (int k = 0; k < numberOfBoards; k++)
         {
             for (int i = 0; i < 9; i++)
             {
@@ -77,14 +92,14 @@ public class Sudoku
                     boards[k][i][j] = input.nextInt();
                 }
             }
-        }
+        }*/
         
         //Test print user input
         //System.out.println("//////////");
         //printBoard(boardOne);
         
         //Send board to board solver method
-        for (int i = 0; i < numberOfBoards; i++)
+        for (int i = 0; i < boardNumber; i++)
         {
             boardSolver(boards[i]);
         }
@@ -99,7 +114,7 @@ public class Sudoku
         {
             return;
         }
-        
+
         //To solver needs to find squares with missing values, recognize the problem type, check rows and columns 
         //Send board to another method to find the missing values and return what type of problem it is and where the missing values are located
         //Store in int[][] variable where column of three represents the three possible missing values and the row represents the location of the value
