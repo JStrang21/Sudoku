@@ -60,15 +60,13 @@ public class Sudoku
     {
         //Create a scanner to get user input
         Scanner input = new Scanner(System.in);
-        
-        //Prompt for number of boards
-        //System.out.println("Enter number of boards: ");
-        //int numberOfBoards = input.nextInt();
-        
         //Prompt user for input
-        System.out.println("Enter three 9x9 matrices: ");
+        System.out.println("Enter 9x9 matrices: ");
+        //Initialize boards holder to hold 100 boards
         int[][][] boards = new int[100][9][9];
        
+        //While there is input continue looping and assigning values to board squares
+        //Crtl+d to tell scanner to stop reading in
         int boardNumber = 0;
         while (input.hasNext())
         {
@@ -81,26 +79,16 @@ public class Sudoku
             }
             boardNumber++;
         }
-        //Need to be able to read in any number of boards
-        //Use for loop to read in user input to board variable
-        /*for (int k = 0; k < numberOfBoards; k++)
-        {
-            for (int i = 0; i < 9; i++)
-            {
-                for (int j = 0; j < 9; j++)
-                {
-                    boards[k][i][j] = input.nextInt();
-                }
-            }
-        }*/
-        
-        //Test print user input
-        //System.out.println("//////////");
-        //printBoard(boardOne);
-        
+
         //Send board to board solver method
         for (int i = 0; i < boardNumber; i++)
         {
+            //Check for board with all 0's
+            if (checkLastBoard(boards[i]))
+            {
+                break;
+            }
+            //If not last board then solve board
             boardSolver(boards[i]);
         }
         System.out.println("END");
@@ -126,6 +114,10 @@ public class Sudoku
         //System.out.println(locationOfMissingValues[0][2]);
 
         //Number of missing values found determines which type of solver the board is sent to
+        if (locationOfMissingValues[3][0] == 1)
+        {
+            fourByFourSolver(board, locationOfMissingValues);
+        }
         if (locationOfMissingValues[2][0] == 1)
         {
             typeThreeSolver(board, locationOfMissingValues);
@@ -179,10 +171,30 @@ public class Sudoku
         return locationOfMissingValues;
     }
 
+    public static void fourByFourSolver(int[][] board, int[][] locationOfMissingValues)
+    {
+        //Check one 3x3 box and find missing value for that square
+        //Use location of last/4th square in 4x4 grid of missing values as the loner square so that the missing values order is correct for sending missing values to typeThreeSolver
+        int lonerRowLocation = locationOfMissingValues[2][1];
+        int lonerColumnLocation = locationOfMissingValues[2][2];
+        //Solve 3x3 square with target loner square
+        int[] lonerLocationAndValue = new int[3];
+        lonerLocationAndValue = solve3x3(board, lonerRowLocation, lonerColumnLocation);
+
+        //Print result
+        System.out.print("(" + lonerLocationAndValue[0] + "," + lonerLocationAndValue[1] + "," + lonerLocationAndValue[2] + ") ");
+
+        //Update locationOfMissingValues variable so that typeThreeSolver doesn't think 4th value is still missing
+        locationOfMissingValues[2][1] = locationOfMissingValues[3][1];
+        locationOfMissingValues[2][2] = locationOfMissingValues[3][2];
+        locationOfMissingValues[3][0] = 0;
+
+        //Once loner square solved then it's a type three problem
+        typeThreeSolver(board, locationOfMissingValues);
+    }
+
     public static void typeThreeSolver(int[][] board, int[][] locationOfMissingValues)
     {
-        //Check if its 2x2 square of missing values
-
         int[] lonerLocationAndValue = new int[3];
         //Find location of loner square
         lonerLocationAndValue = findLonerSquare(board);
@@ -266,6 +278,7 @@ public class Sudoku
         {
             for (int c = 0; c < 3; c++)
             {
+                //Add current iteration to location of top-left square of 3x3 square
                 values[i] = board[r + firstSquareRow][c + firstSquareColumn];
                 i++;
             }
@@ -276,8 +289,13 @@ public class Sudoku
         int missingValue = 0;
         for (int j = 1; j < 9; j++)
         {
+            if (j == 8 && sortedValues[j] == 9)
+            {
+                missingValue = 8;
+                break;
+            }
             //Case where 9 is missing value
-            if (j == 8)
+            if (j == 8 && missingValue == 0 && sortedValues[j] == 8)
             {
                 missingValue = 9;
                 break;
